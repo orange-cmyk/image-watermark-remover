@@ -7,6 +7,7 @@ import Plugins from "./Plugins"
 import { InteractiveSeg } from "./InteractiveSeg"
 import SidePanel from "./SidePanel"
 import DiffusionProgress from "./DiffusionProgress"
+import WatermarkToolbar from "./WatermarkToolbar"
 
 const Workspace = () => {
   const [file, updateSettings] = useStore((state) => [
@@ -15,6 +16,8 @@ const Workspace = () => {
   ])
 
   useEffect(() => {
+    updateSettings({ enableManualInpainting: true })
+
     const fetchCurrentModel = async () => {
       const model = await currentModel()
       updateSettings({ model })
@@ -31,6 +34,7 @@ const Workspace = () => {
       <InteractiveSeg />
       <DiffusionProgress />
       <SidePanel />
+      <WatermarkToolbar />
       {file ? <Editor file={file} /> : <></>}
     </>
   )

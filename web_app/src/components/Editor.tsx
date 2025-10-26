@@ -8,7 +8,7 @@ import {
 } from "react-zoom-pan-pinch"
 import { useKeyPressEvent } from "react-use"
 import { downloadToOutput, runPlugin } from "@/lib/api"
-import { IconButton } from "@/components/ui/button"
+import { Button, IconButton } from "@/components/ui/button"
 import {
   askWritePermission,
   cn,
@@ -21,7 +21,7 @@ import {
   mouseXY,
   srcToFile,
 } from "@/lib/utils"
-import { Eraser, Eye, Redo, Undo, Expand, Download } from "lucide-react"
+import { Eye, Redo, Undo, Expand, Download, Sparkles } from "lucide-react"
 import { useImage } from "@/hooks/useImage"
 import { Slider } from "./ui/slider"
 import { PluginName } from "@/lib/types"
@@ -134,6 +134,14 @@ export default function Editor(props: EditorProps) {
   const hadDrawSomething = useCallback(() => {
     return curLineGroup.length !== 0
   }, [curLineGroup])
+
+  const hasSelection =
+    hadDrawSomething() ||
+    extraMasks.length > 0 ||
+    !!interactiveSegState.tmpInteractiveSegMask;
+
+  const watermarkButtonDisabled =
+    isProcessing || !hasSelection || isInpainting;
 
   useEffect(() => {
     if (
@@ -926,90 +934,103 @@ export default function Editor(props: EditorProps) {
 
       {showRefBrush && renderBrush(getBrushStyle(windowCenterX, windowCenterY))}
 
-      <div className="fixed flex bottom-5 border px-4 py-2 rounded-[3rem] gap-8 items-center justify-center backdrop-filter backdrop-blur-md bg-background/70">
-        <Slider
-          className="w-48"
-          defaultValue={[50]}
-          min={MIN_BRUSH_SIZE}
-          max={MAX_BRUSH_SIZE}
-          step={1}
-          tabIndex={-1}
-          value={[baseBrushSize]}
-          onValueChange={(vals) => handleSliderChange(vals[0])}
-          onClick={() => setShowRefBrush(false)}
-        />
-        <div className="flex gap-2">
-          <IconButton
-            tooltip="Reset zoom & pan"
-            disabled={scale === minScale && panned === false}
-            onClick={resetZoom}
-          >
-            <Expand />
-          </IconButton>
-          <IconButton
-            tooltip="Undo"
-            onClick={handleUndo}
-            disabled={undoDisabled}
-          >
-            <Undo />
-          </IconButton>
-          <IconButton
-            tooltip="Redo"
-            onClick={handleRedo}
-            disabled={redoDisabled}
-          >
-            <Redo />
-          </IconButton>
-          <IconButton
-            tooltip="Show original image"
-            onPointerDown={(ev) => {
-              ev.preventDefault()
-              setShowOriginal(() => {
-                window.setTimeout(() => {
-                  setSliderPos(100)
-                }, 10)
-                return true
-              })
-            }}
-            onPointerUp={() => {
-              window.setTimeout(() => {
-                // 防止快速点击 show original image 按钮时图片消失
-                setSliderPos(0)
-              }, 10)
+      <div className="fixed bottom-6 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-4">
+        <div className="flex items-center gap-6 rounded-full border border-border/70 bg-background/80 px-6 py-4 shadow-2xl backdrop-blur">
+          <div className="flex flex-col gap-2">
+            <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+              画笔大小
+            </span>
+            <div className="flex items-center gap-3">
+              <Slider
+                className="w-48"
+                defaultValue={[50]}
+                min={MIN_BRUSH_SIZE}
+                max={MAX_BRUSH_SIZE}
+                step={1}
+                tabIndex={-1}
+                value={[baseBrushSize]}
+                onValueChange={(vals) => handleSliderChange(vals[0])}
+                onClick={() => setShowRefBrush(false)}
+              />
+              <span className="text-sm font-semibold text-foreground">
+                {Math.round(baseBrushSize)}px
+              </span>
+            </div>
+          </div>
 
-              window.setTimeout(() => {
-                setShowOriginal(false)
-              }, COMPARE_SLIDER_DURATION_MS)
-            }}
-            disabled={renders.length === 0}
-          >
-            <Eye />
-          </IconButton>
-          <IconButton
-            tooltip="Save Image"
-            disabled={!renders.length}
-            onClick={download}
-          >
-            <Download />
-          </IconButton>
+          <div className="hidden h-10 w-px rounded-full bg-border/80 sm:block" />
 
-          {settings.enableManualInpainting &&
-          settings.model.model_type === "inpaint" ? (
+          <div className="flex items-center gap-2">
             <IconButton
-              tooltip="Run Inpainting"
-              disabled={
-                isProcessing || (!hadDrawSomething() && extraMasks.length === 0)
-              }
-              onClick={() => {
-                runInpainting()
-              }}
+              tooltip="重置视图"
+              disabled={scale === minScale && panned === false}
+              onClick={resetZoom}
             >
-              <Eraser />
+              <Expand />
             </IconButton>
-          ) : (
-            <></>
-          )}
+            <IconButton
+              tooltip="撤销"
+              onClick={handleUndo}
+              disabled={undoDisabled}
+            >
+              <Undo />
+            </IconButton>
+            <IconButton
+              tooltip="重做"
+              onClick={handleRedo}
+              disabled={redoDisabled}
+            >
+              <Redo />
+            </IconButton>
+            <IconButton
+              tooltip="对比原图"
+              onPointerDown={(ev) => {
+                ev.preventDefault()
+                setShowOriginal(() => {
+                  window.setTimeout(() => {
+                    setSliderPos(100)
+                  }, 10)
+                  return true
+                })
+              }}
+              onPointerUp={() => {
+                window.setTimeout(() => {
+                  // 防止快速点击 show original image 按钮时图片消失
+                  setSliderPos(0)
+                }, 10)
+
+                window.setTimeout(() => {
+                  setShowOriginal(false)
+                }, COMPARE_SLIDER_DURATION_MS)
+              }}
+              disabled={renders.length === 0}
+            >
+              <Eye />
+            </IconButton>
+            <IconButton
+              tooltip="保存结果"
+              disabled={!renders.length}
+              onClick={download}
+            >
+              <Download />
+            </IconButton>
+          </div>
         </div>
+
+        {settings.enableManualInpainting &&
+        settings.model.model_type === "inpaint" ? (
+          <Button
+            className="cursor-pointer rounded-full px-10 py-5 text-base font-semibold shadow-2xl"
+            size="lg"
+            disabled={watermarkButtonDisabled}
+            onClick={() => {
+              runInpainting()
+            }}
+          >
+            <Sparkles className="mr-2 h-4 w-4" />
+            去除水印
+          </Button>
+        ) : null}
       </div>
     </div>
   )

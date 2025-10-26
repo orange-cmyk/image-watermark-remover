@@ -478,7 +478,7 @@ export const useStore = createWithEqualityFn<AppState & AppAction>()(
         ) {
           toast({
             variant: "destructive",
-            description: "Please draw mask on picture",
+            description: "请先在图片上涂抹需要去除的区域",
           })
           return
         }

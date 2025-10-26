@@ -147,7 +147,14 @@ function Home() {
   })
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between w-full bg-[radial-gradient(circle_at_1px_1px,_#8e8e8e8e_1px,_transparent_0)] [background-size:20px_20px] bg-repeat">
+    <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-[#060710] text-foreground">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,215,141,0.15),_transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,_rgba(87,120,255,0.25),_transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,_rgba(255,105,180,0.22),_transparent_40%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_rgba(255,255,255,0.08)_1px,_transparent_0)] [background-size:22px_22px] opacity-60" />
+      </div>
+
       <Toaster />
       <Header />
       <Workspace />
@@ -157,9 +164,7 @@ function Home() {
             setFile(f)
           }}
         />
-      ) : (
-        <></>
-      )}
+      ) : null}
     </main>
   )
 }
