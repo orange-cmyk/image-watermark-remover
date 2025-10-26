@@ -1,138 +1,121 @@
-<h1 align="center">IOPaint</h1>
-<p align="center">A free and open-source inpainting & outpainting tool powered by SOTA AI model.</p>
+# 图片水印去除工具 Image Watermark Remover
 
-<p align="center">
-  <a href="https://github.com/Sanster/IOPaint">
-    <img alt="total download" src="https://pepy.tech/badge/iopaint" />
-  </a>
-  <a href="https://pypi.org/project/iopaint">
-    <img alt="version" src="https://img.shields.io/pypi/v/iopaint" />
-  </a>
-  <a href="">
-    <img alt="python version" src="https://img.shields.io/pypi/pyversions/iopaint" />
-  </a>
-  <a href="https://huggingface.co/spaces/Sanster/iopaint-lama">
-    <img alt="HuggingFace Spaces" src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Spaces-blue" />
-  </a>
-  <a href="https://colab.research.google.com/drive/1TKVlDZiE3MIZnAUMpv2t_S4hLr6TUY1d?usp=sharing">
-    <img alt="Open in Colab" src="https://colab.research.google.com/assets/colab-badge.svg" />
-  </a>
-</p>
+一个专注图片水印清理的开源网页应用。界面经过重新设计，提供“上传 → 涂抹 → 去除水印”的简单流程，支持 LaMa、PowerPaint 等多种模型，既可以在浏览器里交互式操作，也可以在命令行批处理。
 
-|Erase([LaMa](https://www.iopaint.com/models/erase/lama))|Replace Object([PowerPaint](https://www.iopaint.com/models/diffusion/powerpaint))|
-|-----|----|
-|<video src="https://github.com/Sanster/IOPaint/assets/3998421/264bc27c-0abd-4d8b-bb1e-0078ab264c4a">  | <video src="https://github.com/Sanster/IOPaint/assets/3998421/1de5c288-e0e1-4f32-926d-796df0655846">|
+> ❗️项目基于 [IOPaint](https://github.com/Sanster/IOPaint) 深度定制，感谢原作者的出色工作。
 
-|Draw Text([AnyText](https://www.iopaint.com/models/diffusion/anytext))|Out-painting([PowerPaint](https://www.iopaint.com/models/diffusion/powerpaint))|
-|---------|-----------|
-|<video src="https://github.com/Sanster/IOPaint/assets/3998421/ffd4eda4-f7d4-4693-93d8-d2cd5aa7c6d6">|<video src="https://github.com/Sanster/IOPaint/assets/3998421/c4af8aef-8c29-49e0-96eb-0aae2f768da2">|
+---
 
+## ✨ 主要功能
 
-## Features
+- **全新 Web UI**：浮动工具栏、右侧步骤向导，适合非技术用户快速上手。
+- **多模型支持**：默认使用 LaMa，亦可切换 PowerPaint、BrushNet 等扩散模型，处理复杂或整幅水印。
+- **所见即所得涂抹**：画笔尺寸随时调节，支持撤销 / 重做 / 原图对比 / 结果下载。
+- **粘贴即可导入**：支持拖拽、点击上传、粘贴截图，最大 20MB。
+- **命令行批处理**：同一套后端 API，可在脚本中成批清理水印。
+- **本地部署**：模型与推理由本地完成，素材不上传云端，更方便处理敏感图片。
 
-- Completely free and open-source, fully self-hosted, support CPU & GPU & Apple Silicon
-- [Windows 1-Click Installer](https://www.iopaint.com/install/windows_1click_installer)
-- [OptiClean](https://apps.apple.com/ca/app/opticlean/id6452387177): macOS & iOS App for object erase
-- Supports various AI [models](https://www.iopaint.com/models) to perform erase, inpainting or outpainting task.
-  - [Erase models](https://www.iopaint.com/models#erase-models): These models can be used to remove unwanted object, defect, watermarks, people from image.
-  - Diffusion models: These models can be used to replace objects or perform outpainting. Some popular used models include:
-    - [runwayml/stable-diffusion-inpainting](https://huggingface.co/runwayml/stable-diffusion-inpainting)
-    - [diffusers/stable-diffusion-xl-1.0-inpainting-0.1](https://huggingface.co/diffusers/stable-diffusion-xl-1.0-inpainting-0.1)
-    - [andregn/Realistic_Vision_V3.0-inpainting](https://huggingface.co/andregn/Realistic_Vision_V3.0-inpainting)
-    - [Lykon/dreamshaper-8-inpainting](https://huggingface.co/Lykon/dreamshaper-8-inpainting)
-    - [Sanster/anything-4.0-inpainting](https://huggingface.co/Sanster/anything-4.0-inpainting)
-    - [BrushNet](https://www.iopaint.com/models/diffusion/brushnet)
-    - [PowerPaintV2](https://www.iopaint.com/models/diffusion/powerpaint_v2)
-    - [Sanster/AnyText](https://huggingface.co/Sanster/AnyText)
-    - [Fantasy-Studio/Paint-by-Example](https://huggingface.co/Fantasy-Studio/Paint-by-Example)
+---
 
-- [Plugins](https://www.iopaint.com/plugins):
-  - [Segment Anything](https://iopaint.com/plugins/interactive_seg): Accurate and fast Interactive Object Segmentation
-  - [RemoveBG](https://iopaint.com/plugins/rembg): Remove image background or generate masks for foreground objects
-  - [Anime Segmentation](https://iopaint.com/plugins/anime_seg): Similar to RemoveBG, the model is specifically trained for anime images.
-  - [RealESRGAN](https://iopaint.com/plugins/RealESRGAN): Super Resolution
-  - [GFPGAN](https://iopaint.com/plugins/GFPGAN): Face Restoration
-  - [RestoreFormer](https://iopaint.com/plugins/RestoreFormer): Face Restoration
-- [FileManager](https://iopaint.com/file_manager): Browse your pictures conveniently and save them directly to the output directory.
+## 🚀 快速开始
 
-
-## Quick Start
-
-### Start webui
-
-IOPaint provides a convenient webui for using the latest AI models to edit your images.
-You can install and start IOPaint easily by running following command:
+### 1. 克隆项目并安装依赖
 
 ```bash
-# In order to use GPU, install cuda version of pytorch first.
-# pip3 install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
-# AMD GPU users, please utilize the following command, only works on linux, as pytorch is not yet supported on Windows with ROCm.
-# pip3 install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/rocm5.6
+git clone https://github.com/orange-cmyk/image-watermark-remover.git
+cd image-watermark-remover
 
-pip3 install iopaint
-iopaint start --model=lama --device=cpu --port=8080
+# 建议使用 Python 3.10+
+python3 -m venv .venv
+source .venv/bin/activate
+
+pip install --upgrade pip
+pip install -r requirements.txt
 ```
 
-That's it, you can start using IOPaint by visiting http://localhost:8080 in your web browser.
-
-All models will be downloaded automatically at startup. If you want to change the download directory, you can add `--model-dir`. More documentation can be found [here](https://www.iopaint.com/install/download_model)
-
-You can see other supported models at [here](https://www.iopaint.com/models) and how to use local sd ckpt/safetensors file at [here](https://www.iopaint.com/models#load-ckptsafetensors).
-
-### Plugins
-
-You can specify which plugins to use when starting the service, and you can view the commands to enable plugins by using `iopaint start --help`. 
-
-More demonstrations of the Plugin can be seen [here](https://www.iopaint.com/plugins)
+### 2. 构建前端
 
 ```bash
-iopaint start --enable-interactive-seg --interactive-seg-device=cuda
-```
-
-### Batch processing
-
-You can also use IOPaint in the command line to batch process images:
-
-```bash
-iopaint run --model=lama --device=cpu \
---image=/path/to/image_folder \
---mask=/path/to/mask_folder \
---output=output_dir
-```
-
-`--image` is the folder containing input images, `--mask` is the folder containing corresponding mask images.
-When `--mask` is a path to a mask file, all images will be processed using this mask.
-
-You can see more information about the available models and plugins supported by IOPaint below.
-
-## Development
-
-Install [nodejs](https://nodejs.org/en), then install the frontend dependencies.
-
-```bash
-git clone https://github.com/Sanster/IOPaint.git
-cd IOPaint/web_app
+cd web_app
 npm install
 npm run build
-cp -r dist/ ../iopaint/web_app
+cd ..
+
+# 将编译结果复制到后端静态目录
+cp -r web_app/dist iopaint/web_app
 ```
 
-Create a `.env.local` file in `web_app` and fill in the backend IP and port.
-```
-VITE_BACKEND=http://127.0.0.1:8080
-```
+### 3. 启动服务
 
-Start front-end development environment
 ```bash
+python main.py start --model lama --device cpu --port 8080
+```
+
+浏览器访问 <http://127.0.0.1:8080> 就能使用新版 UI。首次启动会自动下载所选模型权重（LaMa 约 200 MB）。
+
+---
+
+## 🖱️ 网页使用流程
+
+1. **上传图片**：拖拽 / 点击上传 / 直接粘贴截图。
+2. **涂抹水印区域**：按住鼠标左键涂抹，右下角滑杆可以调整画笔尺寸。
+3. **点击「去除水印」**：等待模型处理完成后，可查看对比、撤销或下载结果。
+4. **重新选择**：如需重新涂抹，点击“重新开始涂抹”即可清空当前 mask。
+
+---
+
+## 🧠 模型切换
+
+- **LaMa**：速度快、资源占用低，适合一般场景。
+- **PowerPaint**：基于扩散模型，适合整幅水印或复杂结构，推荐在 GPU 上使用。
+
+切换模型示例：
+
+```bash
+python main.py start --model powerpaint --device cpu --port 8080
+# 或在具备 CUDA 的机器上：
+python main.py start --model powerpaint --device cuda --port 8080
+```
+
+更多可用模型可执行 `python main.py list` 查看。
+
+---
+
+## 🛠️ 命令行批处理
+
+```bash
+python main.py run --model lama --device cpu \
+  --image /path/to/images \
+  --mask /path/to/masks \
+  --output /path/to/output
+```
+
+- `--image`：图片路径或目录。
+- `--mask`：与图片同名的掩膜图片；若提供单个 mask 会应用到所有图片。
+- `--output`：输出目录或文件。
+
+---
+
+## 🧑‍💻 开发模式
+
+前端热更新：
+
+```bash
+cd web_app
 npm run dev
+# VITE_BACKEND 默认为 http://127.0.0.1:8080，可在 web_app/.env.local 中修改
 ```
 
-Install back-end requirements and start backend service
-```bash
-pip install -r requirements.txt
-python3 main.py start --model lama --port 8080
-```
+后端代码修改后需要重新启动 `python main.py start ...`。
 
-Then you can visit `http://localhost:5173/` for development.
-The frontend code will automatically update after being modified,
-but the backend needs to restart the service after modifying the python code.
+---
+
+## 📜 License & 致谢
+
+- 本项目在 Apache-2.0 协议下发布。
+- 参考与使用的主要上游项目：
+  - [IOPaint](https://github.com/Sanster/IOPaint)
+  - [LaMa](https://github.com/saic-mdal/lama)
+  - [PowerPaint](https://github.com/huggingface/diffusers)
+
+欢迎提交 Issue / PR，一起把去水印体验做得更好。 🎨
