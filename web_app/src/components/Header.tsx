@@ -85,8 +85,16 @@ const Header = () => {
   }
 
   return (
-    <header className="h-[60px] px-6 py-4 absolute top-[0] flex justify-between items-center w-full z-20 border-b backdrop-filter backdrop-blur-md bg-background/70">
-      <div className="flex items-center gap-1">
+    <header className="absolute top-0 z-20 flex h-[64px] w-full items-center justify-between border-b border-white/10 bg-background/70 px-6 py-4 backdrop-blur-md">
+      <div className="flex items-center gap-3">
+        <div className="flex flex-col leading-tight">
+          <span className="text-lg font-semibold text-primary">
+            一键去水印
+          </span>
+          <span className="text-[11px] text-muted-foreground">
+            上传 → 涂抹 → 去除，全流程中文体验
+          </span>
+        </div>
         {serverConfig.enableFileManager ? (
           <FileManager photoWidth={512} onPhotoClick={handleOnPhotoClick} />
         ) : (
@@ -95,7 +103,7 @@ const Header = () => {
 
         <ImageUploadButton
           disabled={isInpainting}
-          tooltip="Upload image"
+          tooltip="上传图片"
           onFileUpload={(file) => {
             setFile(file)
           }}
@@ -111,7 +119,7 @@ const Header = () => {
         >
           <ImageUploadButton
             disabled={isInpainting}
-            tooltip="Upload custom mask"
+            tooltip="上传自定义掩码"
             onFileUpload={async (file) => {
               let newCustomMask: HTMLImageElement | null = null
               try {
@@ -129,7 +137,7 @@ const Header = () => {
               ) {
                 toast({
                   variant: "destructive",
-                  description: `The size of the mask must same as image: ${imageWidth}x${imageHeight}`,
+                  description: `掩码尺寸需与图片一致：${imageWidth} × ${imageHeight}`,
                 })
                 return
               }
@@ -158,7 +166,7 @@ const Header = () => {
                   }
                 }}
               >
-                <IconButton tooltip="Run custom mask">
+                <IconButton tooltip="应用自定义掩码">
                   <PlayIcon />
                 </IconButton>
               </PopoverTrigger>
@@ -178,7 +186,7 @@ const Header = () => {
         {file && !model.need_prompt ? (
           <IconButton
             disabled={isInpainting}
-            tooltip="Rerun previous mask"
+            tooltip="再次应用上次涂抹"
             onClick={handleRerunLastMask}
             onMouseEnter={onRerunMouseEnter}
             onMouseLeave={onRerunMouseLeave}
@@ -192,7 +200,7 @@ const Header = () => {
 
       {model.need_prompt ? <PromptInput /> : <></>}
 
-      <div className="flex gap-1">
+      <div className="flex items-center gap-1">
         <Coffee />
         <Shortcuts />
         {serverConfig.disableModelSwitch ? <></> : <SettingsDialog />}

@@ -8,15 +8,14 @@ export function Coffee() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <IconButton tooltip="Buy me a coffee">
+        <IconButton tooltip="支持项目">
           <CoffeeIcon />
         </IconButton>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Buy me a coffee</DialogTitle>
+        <DialogTitle>支持项目开发</DialogTitle>
         <DialogDescription className="mb-8">
-          Hi, if you found my project is useful, please conside buy me a coffee
-          to support my work. Thanks!
+          如果你觉得项目对你有帮助，欢迎请作者喝杯咖啡，持续投入更多精力优化体验，感谢支持！
         </DialogDescription>
         <div className="w-full flex items-center justify-center">
           <a

@@ -61,9 +61,9 @@ const formSchema = z.object({
   interactiveSegModel: z.string(),
 })
 
-const TAB_GENERAL = "General"
-const TAB_MODEL = "Model"
-const TAB_PLUGINS = "Plugins"
+const TAB_GENERAL = "通用设置"
+const TAB_MODEL = "模型管理"
+const TAB_PLUGINS = "插件"
 // const TAB_FILE_MANAGER = "File Manager"
 
 const TAB_NAMES = [TAB_MODEL, TAB_GENERAL, TAB_PLUGINS]
@@ -163,22 +163,22 @@ export function SettingsDialog() {
       const newModelSwitchingTexts: string[] = []
       if (shouldSwitchModel) {
         newModelSwitchingTexts.push(
-          `Switching model from ${settings.model.name} to ${model.name}`
+          `正在切换主模型：${settings.model.name} → ${model.name}`
         )
       }
       if (shouldSwitchRemoveBGModel) {
         newModelSwitchingTexts.push(
-          `Switching RemoveBG model from ${serverConfig?.removeBGModel} to ${values.removeBGModel}`
+          `正在切换去背景模型：${serverConfig?.removeBGModel} → ${values.removeBGModel}`
         )
       }
       if (shouldSwitchRealesrganModel) {
         newModelSwitchingTexts.push(
-          `Switching RealESRGAN model from ${serverConfig?.realesrganModel} to ${values.realesrganModel}`
+          `正在切换超分模型：${serverConfig?.realesrganModel} → ${values.realesrganModel}`
         )
       }
       if (shouldSwitchInteractiveModel) {
         newModelSwitchingTexts.push(
-          `Switching ${PluginName.InteractiveSeg} model from ${serverConfig?.interactiveSegModel} to ${values.interactiveSegModel}`
+          `正在切换交互分割模型：${serverConfig?.interactiveSegModel} → ${values.interactiveSegModel}`
         )
       }
       setModelSwitchingTexts(newModelSwitchingTexts)
@@ -189,13 +189,13 @@ export function SettingsDialog() {
         try {
           const newModel = await switchModel(model.name)
           toast({
-            title: `Switch to ${newModel.name} success`,
+            title: `已切换至 ${newModel.name}`,
           })
           setAppModel(model)
         } catch (error: any) {
           toast({
             variant: "destructive",
-            title: `Switch to ${model.name} failed: ${error}`,
+            title: `切换至 ${model.name} 失败：${error}`,
           })
           setModel(settings.model)
         }
@@ -213,7 +213,7 @@ export function SettingsDialog() {
         } catch (error: any) {
           toast({
             variant: "destructive",
-            title: `Switch RemoveBG model to ${values.removeBGModel} failed: ${error}`,
+            title: `切换去背景模型失败：${error}`,
           })
         }
       }
@@ -230,7 +230,7 @@ export function SettingsDialog() {
         } catch (error: any) {
           toast({
             variant: "destructive",
-            title: `Switch RealESRGAN model to ${values.realesrganModel} failed: ${error}`,
+            title: `切换 RealESRGAN 模型失败：${error}`,
           })
         }
       }
@@ -247,7 +247,7 @@ export function SettingsDialog() {
         } catch (error: any) {
           toast({
             variant: "destructive",
-            title: `Switch ${PluginName.InteractiveSeg} model to ${values.interactiveSegModel} failed: ${error}`,
+            title: `切换交互分割模型失败：${error}`,
           })
         }
       }
@@ -299,7 +299,7 @@ export function SettingsDialog() {
 
   function renderModelList(model_types: string[]) {
     if (!modelInfos) {
-      return <div>Please download model first</div>
+      return <div>尚未下载任何模型</div>
     }
     return modelInfos
       .filter((info) => model_types.includes(info.model_type))
@@ -343,7 +343,7 @@ export function SettingsDialog() {
     return (
       <div className="flex flex-col gap-4 w-[510px]">
         <div className="flex flex-col gap-4 rounded-md">
-          <div className="font-medium">Current Model</div>
+          <div className="font-medium">当前模型</div>
           <div>{model.name}</div>
         </div>
 
@@ -351,22 +351,22 @@ export function SettingsDialog() {
 
         <div className="space-y-4  rounded-md">
           <div className="flex gap-1 items-center justify-start">
-            <div className="font-medium">Available models</div>
+            <div className="font-medium">可用模型</div>
             {/* <IconButton tooltip="How to download new model">
               <Info size={20} strokeWidth={2} className="opacity-50" />
             </IconButton> */}
           </div>
           <Tabs defaultValue={defaultTab}>
             <TabsList>
-              <TabsTrigger value={MODEL_TYPE_INPAINT}>Inpaint</TabsTrigger>
+              <TabsTrigger value={MODEL_TYPE_INPAINT}>去水印模型</TabsTrigger>
               <TabsTrigger value={MODEL_TYPE_DIFFUSERS_SD}>
                 Stable Diffusion
               </TabsTrigger>
               <TabsTrigger value={MODEL_TYPE_DIFFUSERS_SD_INPAINT}>
-                Stable Diffusion Inpaint
+                Stable Diffusion 去水印
               </TabsTrigger>
               <TabsTrigger value={MODEL_TYPE_OTHER}>
-                Other Diffusion
+                其他扩散模型
               </TabsTrigger>
             </TabsList>
             <ScrollArea className="h-[240px] w-full mt-2 outline-none border rounded-lg">
@@ -404,10 +404,9 @@ export function SettingsDialog() {
           render={({ field }) => (
             <FormItem className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <FormLabel>Enable manual inpainting</FormLabel>
+                <FormLabel>手动执行去水印</FormLabel>
                 <FormDescription>
-                  For erase model, click a button to trigger inpainting after
-                  draw mask.
+                  绘制遮罩后，需要点击“去除水印”按钮才会开始处理。
                 </FormDescription>
               </div>
               <FormControl>
@@ -428,9 +427,9 @@ export function SettingsDialog() {
           render={({ field }) => (
             <FormItem className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <FormLabel>Enable download mask</FormLabel>
+                <FormLabel>保存时同时导出遮罩</FormLabel>
                 <FormDescription>
-                  Also download the mask after save the inpainting result.
+                  保存结果图片时，同时下载当前遮罩文件。
                 </FormDescription>
               </div>
               <FormControl>
@@ -451,10 +450,9 @@ export function SettingsDialog() {
           render={({ field }) => (
             <FormItem className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <FormLabel>Enable auto extract prompt</FormLabel>
+                <FormLabel>自动提取提示词</FormLabel>
                 <FormDescription>
-                  Automatically extract prompt/negativate prompt from the image
-                  meta.
+                  从图片元信息中自动读取提示词与反向提示词。
                 </FormDescription>
               </div>
               <FormControl>
@@ -501,8 +499,8 @@ export function SettingsDialog() {
           render={({ field }) => (
             <FormItem className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <FormLabel>Remove Background</FormLabel>
-                <FormDescription>Remove background model</FormDescription>
+                <FormLabel>背景抠图</FormLabel>
+                <FormDescription>选择 RemoveBG 插件使用的模型</FormDescription>
               </div>
               <Select
                 onValueChange={field.onChange}
@@ -511,7 +509,7 @@ export function SettingsDialog() {
               >
                 <FormControl>
                   <SelectTrigger className="w-auto">
-                    <SelectValue placeholder="Select removebg model" />
+                    <SelectValue placeholder="选择模型" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent align="end">
@@ -536,8 +534,8 @@ export function SettingsDialog() {
           render={({ field }) => (
             <FormItem className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <FormLabel>RealESRGAN</FormLabel>
-                <FormDescription>RealESRGAN Model</FormDescription>
+                <FormLabel>RealESRGAN 超分辨率</FormLabel>
+                <FormDescription>选择用于提高清晰度的模型</FormDescription>
               </div>
               <Select
                 onValueChange={field.onChange}
@@ -546,7 +544,7 @@ export function SettingsDialog() {
               >
                 <FormControl>
                   <SelectTrigger className="w-auto">
-                    <SelectValue placeholder="Select RealESRGAN model" />
+                    <SelectValue placeholder="选择模型" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent align="end">
@@ -571,9 +569,9 @@ export function SettingsDialog() {
           render={({ field }) => (
             <FormItem className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <FormLabel>Interactive Segmentation</FormLabel>
+                <FormLabel>交互分割</FormLabel>
                 <FormDescription>
-                  Interactive Segmentation Model
+                  选择用于交互式分割（SAM）的模型
                 </FormDescription>
               </div>
               <Select
@@ -583,7 +581,7 @@ export function SettingsDialog() {
               >
                 <FormControl>
                   <SelectTrigger className="w-auto">
-                    <SelectValue placeholder="Select interactive segmentation model" />
+                    <SelectValue placeholder="选择模型" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent align="end">
@@ -708,7 +706,7 @@ export function SettingsDialog() {
       </AlertDialog>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogTrigger asChild>
-          <IconButton tooltip="Settings">
+          <IconButton tooltip="设置">
             <Settings />
           </IconButton>
         </DialogTrigger>
@@ -718,7 +716,7 @@ export function SettingsDialog() {
           onOpenAutoFocus={(event) => event.preventDefault()}
           // onPointerDownOutside={(event) => event.preventDefault()}
         >
-          <DialogTitle>Settings</DialogTitle>
+          <DialogTitle>设置</DialogTitle>
           <Separator />
 
           <div className="flex flex-row space-x-8 h-full">
@@ -751,7 +749,7 @@ export function SettingsDialog() {
                   )} */}
 
                   <div className="absolute right-10 bottom-6">
-                    <Button onClick={() => onOpenChange(false)}>Ok</Button>
+                    <Button onClick={() => onOpenChange(false)}>确定</Button>
                   </div>
                 </form>
               </div>
